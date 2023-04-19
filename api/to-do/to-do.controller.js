@@ -9,9 +9,15 @@ const ToDoProvider = require("./to-do.provider");
 
 
 class ToDoController {
-  static async getToDos(filters = {}, projection = {}, options = {}) {
+  static async getToDos(userId) {
+    const filters = {};
+    if (userId) {
+      isValidObjectId(userId) || GeneralUtils.UnprocessableEntityError(MESSAGES.MONGO_ID);
+      await ToDoController.checkIsValidUser(userId);
+      filters.userId = userId;
+    }
     const toDoProvider = new ToDoProvider(ToDo);
-    return toDoProvider.findToDos(filters, projection, options);
+    return toDoProvider.findToDos(filters);
   }
 
   static async getToDo(toDoId, userId) {

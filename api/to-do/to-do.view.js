@@ -5,7 +5,8 @@ const ToDoController = require("./to-do.controller");
 class ToDoView {
   static async getToDoTasks(req, res) {
     try {
-      const toDos = await ToDoController.getToDos();
+      const { userId } = req.query;
+      const toDos = await ToDoController.getToDos(userId);
       res.send(toDos);
     } catch (error) {
       throw new ApiError(error);
